@@ -1,0 +1,32 @@
+networks:
+  digimonNetApp:
+    driver: bridge
+
+services:
+
+  postgres-demo:
+    image: postgres:latest
+    container_name: postgres-demo
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: chocolate1122
+      POSTGRES_DB: demo_db
+    ports:
+      - "5432:5432"
+    networks:
+      - digimonNetApp
+
+  demo-app:
+    image: demo
+    container_name: demo-app
+    restart: always
+    depends_on:
+      - postgres-demo
+    ports:
+      - "8080:8080"
+    networks:
+      - digimonNetApp
+    command: ["sh", "-c", "java -jar app.jar"]
+
+
+
